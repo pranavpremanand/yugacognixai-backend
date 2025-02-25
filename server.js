@@ -1,0 +1,45 @@
+const express = require("express");
+const axios = require("axios");
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const RECAPTCHA_SECRET_KEY = "6Lf7g8YqAAAAAB1WsfCwhyYVM2vqV1BO0bp4HMdi";
+const PROJECT_ID = "my-project-14519-1738150820845";
+const RECAPTCHA_SITE_KEY = "6Lf7g8YqAAAAAB1WsfCwhyYVM2vqV1BO0bp4HMdi";
+
+// Verify reCAPTCHA token
+app.post("/api/verify-recaptcha", async (req, res) => {
+  console.log(req.body);
+  const { token } = req.body;
+
+  try {
+    const response = await axios.post(
+      `https://recaptchaenterprise.googleapis.com/v1/projects/${PROJECT_ID}/assessments?key=${RECAPTCHA_SECRET_KEY}`,
+      {
+        event: {
+          token,
+          siteKey: RECAPTCHA_SITE_KEY,
+        },
+      }
+    );
+
+    const { riskAnalysis } = response.data;
+    if (riskAnalysis.score < 0.5) {
+      // Low score indicates potential bot activity
+      res
+        .status(400)
+        .json({ success: false, message: "reCAPTCHA verification failed" });
+    } else {
+      res.json({ success: true, score: riskAnalysis.score });
+    }
+  } catch (error) {
+    console.error("Error verifying reCAPTCHA:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
