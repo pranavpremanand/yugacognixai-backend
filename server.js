@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const RECAPTCHA_SECRET_KEY = "6Lf9R-UqAAAAAOUfOcQGlMxW2uJMUDdfTRnXDBU_";
+const RECAPTCHA_SECRET_KEY = "6Lf9R-UqAAAAAL3XKceOL308VOaFYdQ4G6dWBMZ7";
 // const RECAPTCHA_SECRET_KEY = "6Lf7g8YqAAAAAKmotRHMd3_hsEl6JXJdyHgwTNpM";
 const PROJECT_ID = "my-project-14519-1738150820845";
 const RECAPTCHA_SITE_KEY = "6Lf7g8YqAAAAAB1WsfCwhyYVM2vqV1BO0bp4HMdi";
