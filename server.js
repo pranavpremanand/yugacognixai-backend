@@ -12,7 +12,6 @@ const RECAPTCHA_SITE_KEY = "6Lf7g8YqAAAAAB1WsfCwhyYVM2vqV1BO0bp4HMdi";
 
 // Verify reCAPTCHA token
 app.post("/api/verify-recaptcha", async (req, res) => {
-  console.log(req.body);
   const { token } = req.body;
 
   try {
@@ -28,7 +27,6 @@ app.post("/api/verify-recaptcha", async (req, res) => {
 
     const { riskAnalysis } = response.data;
     if (riskAnalysis.score < 0.5) {
-      // Low score indicates potential bot activity
       res
         .status(400)
         .json({ success: false, message: "reCAPTCHA verification failed" });
@@ -36,7 +34,10 @@ app.post("/api/verify-recaptcha", async (req, res) => {
       res.json({ success: true, score: riskAnalysis.score });
     }
   } catch (error) {
-    console.error("Error verifying reCAPTCHA:", error);
+    console.error(
+      "Error verifying reCAPTCHA:",
+      error.response ? error.response.data : error.message
+    );
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
