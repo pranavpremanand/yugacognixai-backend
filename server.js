@@ -20,8 +20,9 @@ app.post("/api/verify-recaptcha", async (req, res) => {
     url.searchParams.append("response", token);
 
     const res = await axios.post(url.toString());
+    // const res = await axios.post(url.toString());
 
-    const { riskAnalysis } = response.data;
+    const { riskAnalysis } = res.data;
     if (riskAnalysis.score < 0.5) {
       res
         .status(400)
