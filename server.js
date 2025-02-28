@@ -1,5 +1,4 @@
 const express = require("express");
-const axios = require("axios");
 const cors = require("cors");
 
 const app = express();
@@ -20,7 +19,6 @@ app.post("/api/verify-recaptcha", async (req, res) => {
     url.searchParams.append("response", token);
 
     const response = await fetch(url, { method: "POST" });
-    // const response = await axios.post(url.toString());
     const captchaData = await response.json();
 
     if (!captchaData) {
@@ -34,13 +32,11 @@ app.post("/api/verify-recaptcha", async (req, res) => {
         .status(400)
         .json({ success: false, message: "reCAPTCHA verification failed" });
     } else {
-      res
-        .status(200)
-        .json({
-          success: captchaData.success,
-          score: captchaData.score,
-          data: captchaData,
-        });
+      res.status(200).json({
+        success: captchaData.success,
+        score: captchaData.score,
+        data: captchaData,
+      });
     }
   } catch (error) {
     console.error(
