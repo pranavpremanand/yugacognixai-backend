@@ -32,7 +32,7 @@ app.post("/api/verify-recaptcha", async (req, res) => {
         .status(400)
         .json({ success: false, message: "reCAPTCHA verification failed" });
     } else {
-      res.json({ success: true, score: captchaData.score });
+      res.status(200).json({ success: true, score: captchaData.score });
     }
 
     // const { riskAnalysis } = res.data;
